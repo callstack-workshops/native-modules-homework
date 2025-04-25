@@ -2,7 +2,9 @@ import { NavigationContainer } from '@react-navigation/native';
 import type { NativeStackNavigationOptions } from '@react-navigation/native-stack';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import React from 'react';
+import React, { useEffect } from 'react';
+import { NativeModules } from 'react-native';
+import { check, PERMISSIONS } from 'react-native-permissions';
 import { ToastProvider } from 'react-native-toast-notifications';
 
 import { AddLottery } from './screens/AddLottery';
@@ -18,7 +20,13 @@ const options: NativeStackNavigationOptions = {
 
 const queryClient = new QueryClient();
 
+const { Notification } = NativeModules;
+console.log(Notification);
 export const App = () => {
+  useEffect(() => {
+    Notification.requestPermissions();
+    Notification.showNotification('Notification Title', 'Notification Body');
+  }, []);
   return (
     <QueryClientProvider client={queryClient}>
       <ToastProvider>
