@@ -16,29 +16,55 @@ class Notification: NSObject {
   }
 
   @objc
-  func showNotification(_ title: String, location body: String) {
-    let content = UNMutableNotificationContent()
-    content.title = title
-    content.body = body
-    content.sound = UNNotificationSound.default
-
-    let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 0.1, repeats: false)
-
-    let request = UNNotificationRequest(identifier: "requestName", content: content, trigger: trigger)
-
+  func requestPermissions() {
     let center = UNUserNotificationCenter.current()
-    DispatchQueue.main.async {
-      center.add(request) { error in
+    center.getNotificationSettings { settings in      
+      center.requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
         if let error = error {
-          print("Error adding notification request: \(error.localizedDescription)")
+          print("Error requesting notification permissions: \(error.localizedDescription)")
+        }
+  
+        center.getNotificationSettings { newSettings in
+          print("New notification settings: \(newSettings.authorizationStatus.rawValue)")
         }
       }
     }
   }
 
-  // MARK: - RCTBridgeModule
+  @objc
+  func showNotification(_ title: String, location body: String) {    
+    let center = UNUserNotificationCenter.current()
+
+      let content = UNMutableNotificationContent()
+      content.title = title
+      content.body = body
+      content.sound = UNNotificationSound.default
+      content.userInfo = ["foreground": true]
+
+      let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 5, repeats: false)
+      let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
+
+      DispatchQueue.main.async {
+        center.add(request) { error in
+          if let error = error {
+            print("Error adding notification request: \(error.localizedDescription)")
+          } else {
+            print("Notification request added successfully")
+            UNUserNotificationCenter.current().delegate = self
+          }
+        }
+      }
+    
+  }
 
   static func requiresMainQueueSetup() -> Bool {
     return true
+  }
+}
+
+extension Notification: UNUserNotificationCenterDelegate {
+  func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+    print("Will present notification in foreground")
+    completionHandler([.banner, .sound, .badge])
   }
 }

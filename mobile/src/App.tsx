@@ -24,6 +24,7 @@ console.log(Notification);
 
 export const App = () => {
   useEffect(() => {
+    Notification.requestPermissions();
     Notification.showNotification('Notification Title', 'Notification Body');
   }, []);
   return (
