@@ -1,11 +1,16 @@
 package com.mobile;
 
+import android.Manifest
 import android.R
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.content.pm.PackageManager
 import android.os.Build
+import androidx.annotation.RequiresPermission
+import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.ContextCompat
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReactContextBaseJavaModule
 import com.facebook.react.bridge.ReactMethod
@@ -35,6 +40,7 @@ class NotificationModule(context: ReactApplicationContext?) : ReactContextBaseJa
     }
 
     // Annotated functions that will be accessible from JS, with the same name and signature
+    @RequiresPermission(Manifest.permission.POST_NOTIFICATIONS)
     @ReactMethod
     fun showNotification(title: String?, content: String?) {
         // implementation detail of this method
@@ -45,5 +51,24 @@ class NotificationModule(context: ReactApplicationContext?) : ReactContextBaseJa
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
         val notificationManager = NotificationManagerCompat.from(reactApplicationContext)
         notificationManager.notify(666, builder.build()) // Show notification
+    }
+    @ReactMethod
+    fun requestPermissions() {
+        val permissions = arrayOf(
+            Manifest.permission.POST_NOTIFICATIONS
+        )
+        val permissionsToRequest = permissions.filter { permission ->
+            ContextCompat.checkSelfPermission(reactApplicationContext, permission) != PackageManager.PERMISSION_GRANTED
+        }
+
+        if (permissionsToRequest.isNotEmpty()) {
+            currentActivity?.let {
+                ActivityCompat.requestPermissions(
+                    it,
+                    permissionsToRequest.toTypedArray(), // Convert list to array
+                    666 // Pass the request code
+                )
+            }
+        }
     }
 }
