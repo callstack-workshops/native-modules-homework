@@ -1,14 +1,23 @@
 import FontAwesome6 from '@react-native-vector-icons/fontawesome6';
 import { useIsFocused, useNavigation } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
-import { Text, View, StyleSheet, TouchableOpacity } from 'react-native';
+import {
+  Text,
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  NativeModules,
+} from 'react-native';
 
 import { colors } from '../colors';
+import { CustomButton } from '../components/CustomButton.tsx';
 import { Fab } from '../components/Fab.tsx';
 import { Loader } from '../components/Loader.tsx';
 import { LotteryList } from '../components/LotteryList.tsx';
 import { useLotteries } from '../hooks/useLotteries.ts';
 import type { AddLotteryNavigationProp } from '../types';
+
+const { Notification } = NativeModules;
 
 export const Home = () => {
   const [selectedLotteries, setSelectedLotteries] = useState<Array<string>>([]);
@@ -55,6 +64,17 @@ export const Home = () => {
         disabled={selectedLotteries.length === 0}
       >
         <Text style={styles.text}>Register</Text>
+        <CustomButton
+          disabled={false}
+          title="Click Me!"
+          onPress={() => {
+            Notification.showNotification(
+              'hello there!',
+              'custom notification module triggered!'
+            );
+          }}
+          style={styles.customButton}
+        />
       </TouchableOpacity>
       <View style={styles.title}>
         <Text style={styles.titleText}>Lotteries</Text>
@@ -99,5 +119,10 @@ const styles = StyleSheet.create({
   },
   text: {
     color: colors.buttonSecondary,
+  },
+  customButton: {
+    backgroundColor: colors.secondary,
+    width: 100,
+    height: 50,
   },
 });
