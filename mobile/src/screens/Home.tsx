@@ -64,18 +64,18 @@ export const Home = () => {
         disabled={selectedLotteries.length === 0}
       >
         <Text style={styles.text}>Register</Text>
-        <CustomButton
-          disabled={false}
-          title="Click Me!"
-          onPress={() => {
-            Notification.showNotification(
-              'hello there!',
-              'custom notification module triggered!'
-            );
-          }}
-          style={styles.customButton}
-        />
       </TouchableOpacity>
+      <CustomButton
+        disabled={false}
+        title="Click Me!"
+        onPress={() => {
+          Notification.showNotification(
+            'hello there!',
+            'custom notification module triggered!'
+          );
+        }}
+        style={styles.customButton}
+      />
       <View style={styles.title}>
         <Text style={styles.titleText}>Lotteries</Text>
         <FontAwesome6 name="dice" size={36} color="black" iconStyle={'solid'} />
