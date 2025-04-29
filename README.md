@@ -51,10 +51,6 @@ This exercise involves several steps:
 
 *Step 5.* Write the Objective-C counterpart of the `Notification` class in the ``Notification.m`` file, exporting methods to JavaScript.
 
-*Step 6.* Register the notifications in the ``AppDelegate.m`` file to ensure notifications can be shown on iOS devices.
-
-*Step 7.* Import the required statement inside ``AppDelegate.h`` and update the interface definition.
-
 > 💡 You are now here → [Checkpoint 1](../../tree/checkpoint-1)
 
 
@@ -87,9 +83,7 @@ Similar to iOS platform, we want to have Notifications module working on Android
 
 *Step 3.* Create Notification logic for the module. We should create notification channel that complies with Android requirements and then export `showNotification` method into JS world
 
-*Step 4.* Register created package in `MainApplication.java`. Do this by adding `NotificationPackage` inside packages list returned from `getPackages` method
-
-*Step 5.* Add Kotlin support to the project. Import kotlin plugin and add kotlin as dependency in `build.gradle` files. Also, remember to add Notification permissions to Android Manifest file
+*Step 4.* Register created package in `MainApplication.kt`. Do this by adding `NotificationPackage` inside packages list returned from `getPackages` method
 
 > 💡 You are now here → [Checkpoint 3](../../tree/checkpoint-3)
 
@@ -130,6 +124,8 @@ const { Notification } = NativeModules;
 Notification.showNotification('Notification Title', 'Notification Body');
 ```
 
+> 💡 Remember to add permissions for the app to send notifications. You can implement the method in the native module, or use react-native-permissions library.
+
 **Using the Custom Button Native Component:**
 
 *Step 1.* Import the custom native component:
@@ -144,12 +140,12 @@ const CustomButton = requireNativeComponent('RNCustomButton');
 
 ```jsx
 <CustomButton
-	RNEnabledr={true}
-	RNTitle="Click Me!"
+	disabled={false}
+	text="Click Me!"
 	onPress={() => {
 		console.log('Custom button pressed!');
 	}}
-	style={styles.customButton}
+	style={{ width: 100, height: 20, backgroundColor: '#1ce1ce'}}
 />
 ```
 
