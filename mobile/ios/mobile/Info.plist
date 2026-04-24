@@ -53,5 +53,11 @@
 		<string>FontAwesome6_Regular.ttf</string>
 		<string>FontAwesome6_Solid.ttf</string>
 	</array>
+	<key>NSUserNotificationsUsageDescription</key>
+    <string>We need to send you notifications about important updates.</string>
+    <key>UIBackgroundModes</key>
+    <array>
+        <string>remote-notification</string>
+    </array>
 </dict>
 </plist>
